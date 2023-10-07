@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Models\{User};
-
+use App\Repositories\{UserRepository,ResponseRepository};
+use Hash;
 class UserController extends Controller
 {
     /**

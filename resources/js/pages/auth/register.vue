@@ -4,11 +4,11 @@
             <div class="col-lg-5">
                 <div class="card border-0 shadow-xxs-2 mb-6">
                     <div class="card-body px-8 py-6">
-                        <h2 class="card-title fs-30 font-weight-600 text-dark lh-16 mb-2 text-center">Login</h2>
+                        <h2 class="card-title fs-30 font-weight-600 text-dark lh-16 mb-2 text-center">Register</h2>
                         <Form @submit="submitForm" :validation-schema="schema">
                             <div class="form-group mb-4">
                                 <label for="username-1">Name</label>
-                                <vue-input type="text" :apiError="errors.email || []" v-model="user.email" placeholder="Name"/>
+                                <vue-input type="text" name="name" :apiError="errors.email || []" v-model="user.name" placeholder="Name"/>
                             </div>
 
                             <div class="form-group mb-4">
@@ -51,7 +51,7 @@
         },
         methods:{
             async submitForm(){
-                const response = await axios.post('http://127.0.0.1:8000/api/user/login',this.user);
+                const response = await axios.post('http://127.0.0.1:8000/api/user/register',this.user);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){
@@ -62,7 +62,7 @@
                         });
                     }
                 }else if(response.data.success==true){
-                    store.dispatch('Login',response.data.data);
+                    this.$store.dispatch('Login',response.data.data);
                     this.validatonsErrors = [];
                     this.$swal(response.data.message);
                     // this.$router.push({ name: 'Dashboard' });
