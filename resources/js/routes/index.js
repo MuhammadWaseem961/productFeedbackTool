@@ -2,12 +2,22 @@ import { createRouter, createWebHistory } from "vue-router";
 // import Register from "../views/auth/register.vue";
 import Login from "../pages/auth/login.vue";
 import Register from "../pages/auth/register.vue";
+import userDashboardLayout from "../layouts/userDashboard.vue";
+import userDashboard from "../dashboards/users/dashboard.vue";
 // import AdminLogin from "../views/auth/AdminLogin.vue";
 // import doesNtHavePermission from "../views/errors/403.vue";
 // import store from "../store/index";
 
 const routes = [
-  
+    {
+        path:"/",
+        redirect:"/user/dashboard",
+        component:userDashboardLayout,
+        children:[
+            {path:"/user/dashboard", name:"userDashboard", component:userDashboard},
+
+        ]
+    },
     {
         path: "/login",
         name: "login",
