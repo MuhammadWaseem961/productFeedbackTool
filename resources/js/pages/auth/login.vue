@@ -41,9 +41,6 @@
                     password:""
                 },
                 validatonsErrors:{},
-                success:false,
-                error:false,
-                alertMessage:"",
             }
         },
         methods:{
@@ -52,15 +49,17 @@
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){
-                        this.error = true;
-                        this.alertMessage = response.data.message;
+                        this.$swal({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.data.message
+                        });
                     }
                 }else if(response.data.success==true){
-                    store.dispatch('Login',response.data.user);
+                    store.dispatch('Login',response.data.data);
                     this.validatonsErrors = [];
-                    this.error = false;
-                    this.alertMessage = "";
-                    this.$router.push({ name: 'Dashboard' });
+                    this.$swal(response.data.message);
+                    // this.$router.push({ name: 'Dashboard' });
                 }
             }
         },

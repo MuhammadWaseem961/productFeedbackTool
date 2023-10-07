@@ -21,20 +21,6 @@ class UserController extends Controller
     }
 
     /**
-     * return collection of all users
-     */
-    public function index(){
-        return $this->userRepository->all();
-    }
-
-    /**
-     * return array of users with pagination
-     */
-    public function paginate(){
-        return $this->userRepository->paginate(15);
-    }
-
-    /**
      * register user
     */
     public function register(Request $request){
