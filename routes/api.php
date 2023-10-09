@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\{UserController,ApiController};
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +24,9 @@ Route::controller(UserController::class)->prefix('user')->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
     Route::post('profile', 'profile');
+});
+
+Route::controller(ApiController::class)->group(function () {
+    Route::get('products', 'products');
+    Route::get('products/{slug}/detail', 'productDetail');
 });

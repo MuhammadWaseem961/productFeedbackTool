@@ -1,11 +1,9 @@
 <?php
     namespace App\Repositories;
 
-    use Illuminate\Database\Eloquent\Model;
     use App\Interfaces\EloquentRepositoryInterface;
     use App\Models\User;
-use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Collection;
+    use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
     use Validator;
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use HasFactory,SoftDeletes;
+    protected $fillable = ['title', 'slug', 'summary', 'price', 'image'];
 
     public function setSlugAttribute($title){
         $this->attributes['slug'] = self::uniqueSlug($title);
