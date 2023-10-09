@@ -4,7 +4,8 @@
     use Illuminate\Database\Eloquent\Model;
     use App\Interfaces\EloquentRepositoryInterface;
     use App\Models\User;
-    use Illuminate\Support\Collection;
+use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
     use Validator;
 
@@ -50,10 +51,18 @@
         }
 
         /**
+         * create user
+         */
+        
+         public function update($data,$id){
+            return $this->model->find($id)->update($data);
+         }
+
+        /**
          * data validations
          */
-        public function validations($data){
-            $validations = Validator::make($data,$this->rules());
+        public function validations($data,$rules){
+            $validations = Validator::make($data,$rules);
             if($validations->fails()){
                 return ['success'=>false,"errors"=>$validations->errors()];
             }
@@ -61,13 +70,17 @@
         }
 
         /**
-         * data validations rules
+         * check record using id
          */
-        public function rules(){
-            return [
-                "name"=>'bail|required',
-                "email"=>'bail|required|email|unique:users',
-                "password"=>'bail|required|min:6',
-            ];
+        public function findByID($id){
+            return $this->model->find($id);
+        }
+
+
+         /**
+         * check record using email
+         */
+        public function findByEmail($email){
+            return $this->model->where('email',$email)->first();
         }
     }

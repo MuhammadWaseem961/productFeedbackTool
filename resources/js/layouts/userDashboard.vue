@@ -6,7 +6,8 @@
                     <div class="sticky-area shadow-xs-1 py-3">
                         <div class="d-flex px-3 px-xl-6 w-100">
                             <router-link to="/" class="navbar-brand" >
-                                <img src="/images/logo.png" alt="HomeID">
+                                <!-- <img src="/images/logo.png" alt="HomeID"> -->
+                                Product Feedback Tool
                             </router-link>
                             <div class="ml-auto d-flex align-items-center ">
                                 <div class="d-flex align-items-center d-xl-none">
@@ -52,11 +53,27 @@
                                 <li class="list-group-item pt-6 pb-4">
                                     <h5 class="fs-13 letter-spacing-087 text-muted mb-3 text-uppercase px-3">Main</h5>
                                     <ul class="list-group list-group-no-border rounded-lg">
-                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item @if(Request::is('user/profile')) active @endif">
-                                            <router-link to="#" class="text-heading  lh-1 sidebar-link">
+                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                            <router-link to="/user/profile" class="text-heading  lh-1 sidebar-link">
                                                 <span class="sidebar-item-icon d-inline-block mr-3 fs-20"><i
                                                         class="fal fa-user"></i></span>
                                                 <span class="sidebar-item-text">Profile</span>
+                                            </router-link>
+                                        </li>
+
+                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                            <router-link to="/user/change/password" class="text-heading  lh-1 sidebar-link">
+                                                <span class="sidebar-item-icon d-inline-block mr-3 fs-20"><i
+                                                        class="fal fa-user"></i></span>
+                                                <span class="sidebar-item-text">Change Password</span>
+                                            </router-link>
+                                        </li>
+
+                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                            <router-link to="/user/feedback" class="text-heading  lh-1 sidebar-link">
+                                                <span class="sidebar-item-icon d-inline-block mr-3 fs-20"><i
+                                                        class="fal fa-user"></i></span>
+                                                <span class="sidebar-item-text">Feedbacks</span>
                                             </router-link>
                                         </li>
 
@@ -84,6 +101,7 @@
                                 </form> -->
                             </div>
                             <div class="col-md-6 d-flex flex-wrap justify-content-md-end order-0 order-md-1">
+                               
                                 <div class="dropdown  border-0 py-3 text-right">
                                     <router-link to="#"
                                         class="dropdown-toggle text-heading pr-3 pr-sm-6 d-flex align-items-center justify-content-end"
@@ -100,6 +118,7 @@
                                         <router-link to="/" class="dropdown-item" type="button" >Logout</router-link>>
                                     </div>
                                 </div>
+
                             </div>
                         </nav>
                     </div>
@@ -114,6 +133,10 @@
 
 <script>
     export default {
-        
+        methods:{
+            logout(){
+                this.$store.dispatch('logout',{});
+            }
+        }
     }
 </script>

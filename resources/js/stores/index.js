@@ -13,10 +13,14 @@ export default createStore({
         },
     },
     actions: {
+        
         toggleSidebarColor({ commit }, payload) {
             commit("sidebarType", payload);
         },
         Login({ commit }, user) {
+            commit('setUser', user);
+        },
+        Logout({ commit }, user) {
             commit('setUser', user);
         },
         adminLogin({ commit }, user) {

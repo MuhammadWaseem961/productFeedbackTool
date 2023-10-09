@@ -20,14 +20,23 @@
         public function store($data);
 
         /**
-         * data validations
+         * update model record
          */
-        public function validations($data);
+        public function update($data,$id);
 
         /**
-         * data validations rules
+         * data validations
          */
-        public function rules();
+        public function validations($data,$rules);
 
+        /**
+         * check record using email
+         */
+        public function findByEmail($email);
+
+         /**
+         * check record using email
+         */
+        public function findByID($id);
         
     }

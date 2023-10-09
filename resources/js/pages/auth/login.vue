@@ -59,7 +59,7 @@
                     store.dispatch('Login',response.data.data);
                     this.validatonsErrors = [];
                     this.$swal(response.data.message);
-                    // this.$router.push({ name: 'Dashboard' });
+                    this.$router.push({ name: response.data.data.redirectUrl });
                 }
             }
         },

@@ -4,17 +4,23 @@ import Login from "../pages/auth/login.vue";
 import Register from "../pages/auth/register.vue";
 import userDashboardLayout from "../layouts/userDashboard.vue";
 import userDashboard from "../dashboards/users/dashboard.vue";
+import userProfile from "../dashboards/users/userProfile.vue";
+import userChangePassword from "../dashboards/users/changePassword.vue";
+import userFeedbacks from "../dashboards/users/feedbacks.vue";
 // import AdminLogin from "../views/auth/AdminLogin.vue";
 // import doesNtHavePermission from "../views/errors/403.vue";
 // import store from "../store/index";
 
 const routes = [
     {
-        path:"/",
+        path:"/user",
         redirect:"/user/dashboard",
         component:userDashboardLayout,
         children:[
             {path:"/user/dashboard", name:"userDashboard", component:userDashboard},
+            {path:"/user/profile", name:"userProfile", component:userProfile},
+            {path:"/user/change/password", name:"userChangePassword", component:userChangePassword},
+            {path:"/user/feedback", name:"userFeedbacks", component:userFeedbacks},
 
         ]
     },

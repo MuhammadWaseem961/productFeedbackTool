@@ -8,7 +8,7 @@
                         <Form @submit="submitForm" :validation-schema="schema">
                             <div class="form-group mb-4">
                                 <label for="username-1">Name</label>
-                                <vue-input type="text" name="name" :apiError="errors.email || []" v-model="user.name" placeholder="Name"/>
+                                <vue-input type="text" name="name" :apiError="errors.name || []" v-model="user.name" placeholder="Name"/>
                             </div>
 
                             <div class="form-group mb-4">
@@ -74,7 +74,7 @@
                 return yup.object().shape({
                     name: yup.string().required(),
                     email: yup.string().email().required(),
-                    password: yup.string().min(8).required(),
+                    password: yup.string().min(6).required(),
                 });
             },
             errors() {
