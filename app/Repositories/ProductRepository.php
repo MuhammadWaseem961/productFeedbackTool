@@ -43,7 +43,9 @@
          * get product detail against slug of product
          */
         public function productDetail($columns,$slug){
-            return $this->model->select($columns)->where('slug',$slug)->first();
+            $productDetail = $this->model->with('feedbacks')->select($columns)->where('slug',$slug)->first();
+            $productDetail['userIDs'] = $productDetail->feedbacksUsersID();
+            return $productDetail;
         }
         
     }

@@ -25,14 +25,14 @@ class FeedbackController extends Controller
      * create user feedback
     */
     public function store(Request $request){
+       
         // validate the user input fields
         $validations = $this->feedbackRepository->validations($request->all(),["title"=>'bail|required',"feedback_category_id"=>'bail|required|',"description"=>'bail|required']);
         // if validations fails then return error in response
         if(!$validations['success']){ return $this->responseRepository->error("",$validations['errors']);}
-        $feedback = $this->feedbackRepository->store($request->all());
-        return $feedback;
+        $feedback = $this->feedbackRepository->store($request);
         if(!is_null($feedback)){
-            return $this->responseRepository->success("Feedback added successfully");
+            return $this->responseRepository->success("Feedback added successfully",$feedback);
         }
     }
 }

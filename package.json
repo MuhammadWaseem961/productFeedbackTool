@@ -17,6 +17,8 @@
     },
     "dependencies": {
         "jquery": "^3.7.1",
+        "laravel-echo": "^1.15.3",
+        "pusher-js": "^8.3.0",
         "vee-validate": "^4.11.8",
         "vue-router": "^4.2.5",
         "vue-sweetalert2": "^5.0.5",

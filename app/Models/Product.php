@@ -21,4 +21,14 @@ class Product extends Model
         $slug = preg_replace('/-+/', '-', $slug); // Replaces multiple hyphens with single one.
         return $slug;
     }
+
+    // product feedbacks
+    public function feedbacks(){
+        return $this->hasMany(Feedback::class);
+    }
+
+    // get list of of user id whose give feedbacks
+    public function feedbacksUsersID(){
+        return Feedback::where('product_id',$this->id)->pluck('user_id')->toArray();
+    }
 }

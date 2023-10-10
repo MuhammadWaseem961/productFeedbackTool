@@ -4,7 +4,7 @@ import axios from "axios";
 export default createStore({
     state: {
         user: JSON.parse(localStorage.getItem('user')) || {},
-
+        apiUrl:"http://127.0.0.1:8000/api/"
     },
     mutations: {
         setUser(state, data) {

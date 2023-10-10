@@ -16,7 +16,7 @@
                             <div class="col-xl-12 mb-6 mb-xl-0">
                                 <div class="card">
                                     <div class="card-body p-6">
-                                        <Form @submit="submitForm" :validation-schema="schema">
+                                        <Form @submit="submitForm" :validation-schema="schema" enctype="multipart/form-data">
                                             <div class="row">
                                                 <div class="col-md-6 invoice-address-company">
                                                     <div class="invoice-address-company-fields">
@@ -50,7 +50,7 @@
                                                     <div class="invoice-address-company-fields">
                                                         <div class="form-group">
                                                             <vue-label for="file" class="text-heading" text="Screenshosts/Files"/>
-                                                            <input type="file" class="form-control" ref="fileInput" multiple />
+                                                            <input type="file" class="form-control" @change="onFileChange" multiple />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -69,6 +69,29 @@
                     </div>
                 </div>
             </div>
+
+            <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated">
+                <div class="mb-6"> <h2 class="mb-0 text-heading fs-22 lh-15">Add Feedback</h2> </div>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="row">
+                            <div class="col-xl-12 mb-6 mb-xl-0">
+                                <div class="card">
+                                    <div class="card-body p-6">
+                                        <div class="row">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" v-for="feedback in feedbacks" :key="feedback.id">
+                                                <div>{{feedback.title}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+
         </div>
 </section>
 </template>
@@ -97,6 +120,7 @@
                 },
                 validatonsErrors:{},
                 feedbackCategories: [],
+                feedbacks: [],
             }
         },
         mounted(){
@@ -111,18 +135,32 @@
                 if(response.data.success){
                     this.product = response.data.data.product;
                     this.feedbackCategories = response.data.data.feedbackCategories;
+                    this.feedbacks = this.product.feedbacks;
                 }
                
             },
+            
+            onFileChange(event) {
+                this.feedback.files = Array.from(event.target.files);
+            },
+            listen(){
+                Echo.channel('product.'+this.product.id)
+                .listen('NewFeedback',(feedback)=>{
+                    this.feedbacks.unshift(feedback);
+                });
+            },
             async submitForm(){
-                const files = this.$refs.fileInput.files;
-                if(files.length>0){
-                    for (let i = 0; i < files.length; i++) {
-                        this.feedback.files.push(files[i]);
-                    }
-                }
-                this.feedback.product_id = this.product.id;
-                const response = await axios.post('http://127.0.0.1:8000/api/feedbacks/store',this.feedback);
+                let formData = new FormData();
+                formData.append('title',this.feedback.title);
+                formData.append('feedback_category_id',this.feedback.feedback_category_id);
+                formData.append('description',this.feedback.description);
+                formData.append('product_id',this.product.id);
+                formData.append('user_id',this.feedback.user_id);
+                this.feedback.files.forEach((file) => {
+                    formData.append('files[]', file);
+                });
+
+                const response = await axios.post(this.$store.state.apiUrl+'feedbacks/store',formData);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){
@@ -134,6 +172,7 @@
                     }
                 }else if(response.data.success==true){
                     this.$swal(response.data.message);
+                    this.feedbacks.unshift(response.data.data);
                 }
             },
         },
@@ -149,6 +188,7 @@
                 return this.validatonsErrors; // Computed property to access the server response
             },
             isAuthenticated(){
+                // return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at) && (this.product.userIDs.length>0 && !this.product.userIDs.includes(this.$store.state.user.id));
                 return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at);
             }
         },

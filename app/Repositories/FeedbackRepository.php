@@ -7,6 +7,7 @@
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
     use Validator;
+    use App\Events\NewFeedback;
 
     class FeedbackRepository implements EloquentRepositoryInterface
     {
@@ -46,12 +47,14 @@
          * create user
          */
         
-        public function store($data){
-            return $this->uploadMultipleFiles($data,'uploads/feedbacks');
-            if(count($data['files'])>0){
-                $data['files'] = json_encode($this->uploadMultipleFiles($data,'uploads/feedbacks'));
+        public function store($request){
+            $data = $request->except('files');
+            if(count($request->files)>0){
+                $data['files'] = json_encode($this->uploadMultipleFiles($request,'uploads/feedbacks'));
             }
-            return $this->model->create($data);
+            $feedback = $this->model->create($data);
+            broadcast(new NewFeedback($feedback))->toOthers();
+            return $feedback;
         }
 
         /**
