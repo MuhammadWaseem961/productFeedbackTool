@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="card col-md-3 col-lg-3 col-sm-4 col-xs-12 m-2" style="width: 18rem;" v-for="product in productsList" :key="product.id">
-                <img class="card-img-top" :src="product.image" :alt="product.title" style="height: 220p;">
+                <img class="card-img-top" :src="product.image" :alt="product.title" style="height: 248px;object-fit: cover;object-position: center;">
                 <div class="card-body">
                     <h5 class="card-title">{{product.title}}</h5>
                     <p class="card-text">{{ product.summary }}</p>

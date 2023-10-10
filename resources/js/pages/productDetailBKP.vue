@@ -81,44 +81,54 @@
                                 <div class="card">
                                     <div class="card-body p-6">
                                         <div class="row">
-                                            <div class="container__  col-lg-12" v-for="feedback in feedbacks" :key="feedback.id">
-                                                <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
-                                                <p><span>{{feedback.title}}</span> {{feedback.category.title}}</p>
-                                                <p>{{feedback.description}}</p>
-                                                <span>{{feedback.created_at}}</span>
-                                                <div class="d-flex w-100 align-items-end justify-content-end">
-                                                    <button class="btn btn-primary d-flex align-items-center btn-sm">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
-                                                        </svg> &nbsp;
-                                                        <span>6</span>
-                                                    </button>
-                                                    <button class="btn btn-primary ml-1 d-flex align-items-center btn-sm"> 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"></path>
-                                                        </svg> &nbsp;
-                                                        <span>5</span>
-                                                    </button>
-                                                </div>
+                                                <DataTable class="w-100" :options="{select: true}">
+                                                    <tbody>
+                                                        <tr v-for="feedback in feedbacks" :key="feedback.id">
+                                                            <td>
+                                                                <div class="container__  col-lg-12" >
+                                                                    <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
+                                                                    <p><span>{{feedback.title}}</span> {{feedback.category.title}}</p>
+                                                                    <p>{{feedback.description}}</p>
+                                                                    <span>{{feedback.created_at}}</span>
+                                                                    <div class="d-flex w-100 align-items-end justify-content-end">
+                                                                        <button class="btn btn-primary d-flex align-items-center btn-sm">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
+                                                                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
+                                                                            </svg> &nbsp;
+                                                                            <span>6</span>
+                                                                        </button>
+                                                                        <button class="btn btn-primary ml-1 d-flex align-items-center btn-sm"> 
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
+                                                                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"></path>
+                                                                            </svg> &nbsp;
+                                                                            <span>5</span>
+                                                                        </button>
+                                                                    </div>
 
-                                                <div class="container__  col-lg-12" >
-                                                    <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
-                                                    <p><span>{{feedback.title}}</span></p>
-                                                    <p>{{feedback.description}}</p>
-                                                    <span>{{feedback.created_at}}</span>
-                                                </div>
+                                                                    <div class="container__  col-lg-12" >
+                                                                        <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
+                                                                        <p><span>{{feedback.title}}</span></p>
+                                                                        <p>{{feedback.description}}</p>
+                                                                        <span>{{feedback.created_at}}</span>
+                                                                    </div>
 
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control h-40" placeholder="Comment here">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary h-40" type="button">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                                                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div> 
+                                                                    <div class="input-group mb-3">
+                                                                        <input type="text" class="form-control h-40" placeholder="Comment here">
+                                                                        <div class="input-group-append">
+                                                                            <button class="btn btn-primary h-40" type="button">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                                                                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
+                                                                                </svg>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                               
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </DataTable >
+                                                
                                         </div>
                                     </div>
                                 </div>
@@ -144,6 +154,9 @@
 </style>
 
 <script>
+    import DataTable from 'datatables.net-vue3'
+    import Select from 'datatables.net-select';
+    DataTable.use(Select);
     import axios from "axios";
     import vueInput from '../components/vueInput.vue';
     import vueLabel from '../components/vueLabel.vue';
@@ -245,6 +258,7 @@
             vueSelect,
             vueTextarea,
             Form,
+            DataTable
         },
         
     
