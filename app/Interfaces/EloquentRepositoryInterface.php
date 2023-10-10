@@ -29,11 +29,6 @@
          */
         public function validations($data,$rules);
 
-        /**
-         * check record using email
-         */
-        public function findByEmail($email);
-
          /**
          * check record using email
          */

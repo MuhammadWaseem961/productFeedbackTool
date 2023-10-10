@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('title')->nullable();
             $table->longText('description')->nullable();
+            $table->longText('files')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('feedback_category_id')->references('id')->on('feedback_categories')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

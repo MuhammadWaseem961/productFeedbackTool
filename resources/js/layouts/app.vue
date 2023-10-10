@@ -32,7 +32,11 @@
                             <div class="">
                                 <ul class="navbar-nav flex-column justify-content-lg-end d-flex flex-wrap align-items-center text-body">
                                     <li class="nav-item">
-                                        <div class="border-md-right border-0 py-3 text-right" v-if="this.$store.state.user!=null">
+                                        <div class="border-md-right border-0 py-3 text-right" v-if="isAuthenticated">
+                                            <router-link to="/login" class="dropdown-item" >Logout</router-link>
+                                        </div>
+
+                                        <div class="border-md-right border-0 py-3 text-right" v-else>
                                             <router-link to="/login" class="dropdown-item" >Login</router-link>
                                         </div>
 
@@ -44,7 +48,11 @@
                     <div class="d-none d-lg-block">
                         <ul class="navbar-nav flex-row justify-content-lg-end d-flex flex-wrap align-items-center text-body py-2">
                             <li class="nav-item">
-                                <div class="border-md-right border-0 py-3 text-right" v-if="this.$store.state.user!=null">
+                                <div class="border-md-right border-0 py-3 text-right" v-if="isAuthenticated">
+                                    <router-link to="/login" class="dropdown-item" >Logout</router-link>
+                                </div>
+
+                                <div class="border-md-right border-0 py-3 text-right" v-else>
                                     <router-link to="/login" class="dropdown-item" >Login</router-link>
                                 </div>
                             </li>
@@ -611,6 +619,13 @@
 
 <script>
     export default {
-
+        mounted(){
+            console.clear();
+        },
+        computed:{
+            isAuthenticated(){
+                return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at);
+            }
+        }
     }
 </script>

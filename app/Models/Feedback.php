@@ -9,4 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Feedback extends Model
 {
     use HasFactory,SoftDeletes;
+    protected $table= "feedbacks";
+    protected $fillable = ['product_id', 'feedback_category_id', 'user_id', 'title', 'description', 'files'];
 }

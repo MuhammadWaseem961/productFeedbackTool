@@ -1,7 +1,7 @@
 <template>
     <Field :name="name" :validateOnBlur="true" v-slot="{ errors }">
         <input :type="type" class="form-control border-0" :class="getClasses(size, valid)" :name="name" :id="id"
-            :placeholder="placeholder" @input="$emit('update:modelValue', $event.target.value);" :value="value"/>
+            :placeholder="placeholder" @input="$emit('update:modelValue', $event.target.value);" :multiple="multiple"/>
 
         <span v-if="apiError && apiError.length" class="text-danger mt-1">{{ apiError[0].charAt(0).toUpperCase() +
             apiError[0].slice(1) }}</span>
@@ -36,6 +36,10 @@
             value: String,
             placeholder: String,
             type: String,
+            multiple: {
+                type: Boolean,
+                default: false,
+            },
             isRequired: Boolean,
 
         },

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('slug')->nullable();
             $table->string('summary')->nullable();
+            $table->string('image')->nullable();
             $table->double('price')->default(0);
             $table->softDeletes();
             $table->timestamps();

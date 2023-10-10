@@ -30,11 +30,20 @@
             return $this->model->all();    
         }
 
+        /*
+            * list with specific columns
+            * @return Collection
+        */
+        public function recordWithSpecificColumns($columns): Collection
+        {
+            return $this->model->select($columns)->get();    
+        }
+
         /**
          * get product detail against slug of product
          */
-        public function productDetail($slug){
-            return $this->model->where('slug',$slug)->first();
+        public function productDetail($columns,$slug){
+            return $this->model->select($columns)->where('slug',$slug)->first();
         }
         
     }
