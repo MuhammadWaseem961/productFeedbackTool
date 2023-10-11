@@ -52,7 +52,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios from '../../config/axios';
     import vueInput from '../../components/vueInput.vue';
     import vueLabel from '../../components/vueLabel.vue';
     import { Form } from 'vee-validate';
@@ -65,6 +65,7 @@
                     current_password:'',
                     password:'',
                     password_confirmation:'',
+                    id:this.$store.state.user.id
                 },
                 validatonsErrors:{},
             }
@@ -88,7 +89,7 @@
         },
         methods:{
             async submitForm(){
-                const response = await axios.post('http://127.0.0.1:8000/api/user/profile',this.user);
+                const response = await axios.post('update/password',this.user);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){

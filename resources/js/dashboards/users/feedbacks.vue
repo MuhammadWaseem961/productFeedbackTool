@@ -8,7 +8,7 @@
                         <div class="card">
                             <div class="card-body p-6">
                                 <div class="table-responsive pb-4">
-                                    <table class="table data__table table-hover bg-white border rounded-lg">
+                                    <table id="myDataTable" class="table data__table table-hover bg-white border rounded-lg">
                                         <thead>
                                             <tr role="row">
                                                 <th class="no-sort py-6 pl-6">#</th>
@@ -44,13 +44,20 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios from '../../config/axios';
 
     export default {
         data(){
             return {
                 
             }
+        },
+        mounted() {
+            // Initialize DataTables
+            $('#myDataTable').DataTable({
+            responsive: true, // Enable responsive design
+            // Add any other DataTable options here
+            });
         },
         components:{
             

@@ -24,21 +24,10 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <!--<a class="dropdown-item" href="#">My Profile</a>-->
-                                            <router-link to="/" class="dropdown-item" type="button" >Logout</router-link>>
+                                            <router-link to="/" class="dropdown-item" type="button" @click="logout">Logout</router-link>
                                         </div>
                                     </div>
-                                    <div class="dropdown no-caret py-4 px-3 d-flex align-items-center notice mr-3">
-                                        <a href="#" class="dropdown-toggle text-heading fs-20 font-weight-500 lh-1"
-                                            data-toggle="dropdown">
-                                            <i class="far fa-bell"></i>
-                                            <span class="badge badge-primary badge-circle badge-absolute font-weight-bold fs-13">1</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse"
                                     data-target="#primaryMenuSidebar" aria-controls="primaryMenuSidebar"
@@ -115,7 +104,7 @@
                                         </div>
                                     </router-link>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
-                                        <router-link to="/" class="dropdown-item" type="button" >Logout</router-link>>
+                                        <router-link to="/" class="dropdown-item" type="button" @click="logout">Logout</router-link>
                                     </div>
                                 </div>
 
@@ -135,7 +124,7 @@
     export default {
         methods:{
             logout(){
-                this.$store.dispatch('logout',{});
+                this.$store.dispatch('Logout',{});
             }
         }
     }

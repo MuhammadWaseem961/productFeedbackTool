@@ -24,6 +24,7 @@ Route::controller(UserController::class)->prefix('user')->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login');
     Route::post('profile', 'profile');
+    Route::post('update/password', 'changePasswrd');
 });
 
 Route::controller(ApiController::class)->group(function () {

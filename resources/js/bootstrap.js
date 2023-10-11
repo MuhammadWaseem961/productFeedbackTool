@@ -24,7 +24,7 @@ window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: "acd41e8196e87350e747",
-    cluster:"eu",
+    key: "475a838e65ad35491e90",
+    cluster:"mt1",
     encrypted:true
 });

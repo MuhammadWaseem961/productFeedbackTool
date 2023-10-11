@@ -29,7 +29,7 @@
 
 <script>
     import vueInput from '../../components/vueInput.vue';
-    import axios from "axios";
+    import axios from '../../config/axios';
     import store from "../../stores";
     import { Form} from 'vee-validate';
     import * as yup from 'yup';
@@ -45,7 +45,7 @@
         },
         methods:{
             async submitForm(){
-                const response = await axios.post('http://127.0.0.1:8000/api/user/login',this.user);
+                const response = await axios.post('user/login',this.user);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){

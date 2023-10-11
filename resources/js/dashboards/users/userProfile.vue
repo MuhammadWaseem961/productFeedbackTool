@@ -13,7 +13,7 @@
                                             <div class="invoice-address-company-fields">
                                                 <div class="form-group">
                                                     <vue-label for="name" class="text-heading" text="Name"/>
-                                                    <vue-input type="text" id="name" name="name" :value="user.name" :apiError="errors.name || []" v-model="user.name" placeholder="Name" />
+                                                    <vue-input type="text" id="name" name="name" value={{this.$store.state.user.name}} :apiError="errors.name || []" v-model="user.name" placeholder="Name" />
                                                 </div>
                                             </div>
                                         </div>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios from '../../config/axios';
     import vueInput from '../../components/vueInput.vue';
     import vueLabel from '../../components/vueLabel.vue';
     import { Form } from 'vee-validate';
@@ -78,7 +78,7 @@
         },
         methods:{
             async submitForm(){
-                const response = await axios.post('http://127.0.0.1:8000/api/user/profile',this.user);
+                const response = await axios.post('user/profile',this.user);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){

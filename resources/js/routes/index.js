@@ -12,18 +12,19 @@ import Home from "../pages/home.vue";
 import productDetail from "../pages/productDetail.vue";
 // import AdminLogin from "../views/auth/AdminLogin.vue";
 // import doesNtHavePermission from "../views/errors/403.vue";
-// import store from "../store/index";
+import store from "../stores/index";
 
 const routes = [
     {
         path:"/user",
         redirect:"/user/dashboard",
         component:userDashboardLayout,
+        meta:{requireAuth:true,type:0},
         children:[
-            {path:"/user/dashboard", name:"userDashboard", component:userDashboard},
-            {path:"/user/profile", name:"userProfile", component:userProfile},
-            {path:"/user/change/password", name:"userChangePassword", component:userChangePassword},
-            {path:"/user/feedback", name:"userFeedbacks", component:userFeedbacks},
+            {path:"/user/dashboard", name:"userDashboard", component:userDashboard ,meta:{requireAuth:true,type:0}},
+            {path:"/user/profile", name:"userProfile", component:userProfile,meta:{requireAuth:true,type:0}},
+            {path:"/user/change/password", name:"userChangePassword", component:userChangePassword,meta:{requireAuth:true,type:0}},
+            {path:"/user/feedback", name:"userFeedbacks", component:userFeedbacks,meta:{requireAuth:true,type:0}},
 
         ]
     },
@@ -62,25 +63,14 @@ const router = createRouter({
     linkActiveClass: "active",
 });
 
-// router.beforeEach((to, from, next) => {
-//     if (to.meta.requiresAuth) {
-//         // Check if the route requires authentication
-//         if (!store.state.user) {
-//             // If not authenticated, redirect to login or another route
-//             next('/admin/login');
-//         } else {
-//             // If authenticated, allow access to the route
-//             // check user has route permission
-//             if (!store.state.user.permissions.includes(to.meta.permission)) {
-//                 next('/403');
-//             } else {
-//                 next();
-//             }
-//         }
-//     } else {
-//         // For routes that don't require authentication, allow access
-//         next();
-//     }
-// });
+router.beforeEach((to, from, next) => {
+    // Check if the route requires authentication
+    if (to.meta.requireAuth && (typeof(store.state.user.id)=="undefined" || parseInt(new Date()/1000) > store.state.user.expire_at)) {
+        next('/login');
+    } else {
+        // For routes that don't require authentication, allow access
+        next();
+    }
+});
 
 export default router;

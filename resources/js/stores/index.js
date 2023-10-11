@@ -11,6 +11,10 @@ export default createStore({
             state.user = data;
             localStorage.setItem('user', JSON.stringify(data));
         },
+        Logout(state, data) {
+            state.user = data;
+            localStorage.removeItem('user');
+        },
     },
     actions: {
         
@@ -21,7 +25,7 @@ export default createStore({
             commit('setUser', user);
         },
         Logout({ commit }, user) {
-            commit('setUser', user);
+            commit('Logout', user);
         },
         adminLogin({ commit }, user) {
             commit('setUser', user);

@@ -115,23 +115,17 @@ class UserController extends Controller
      * update user password
      */
     public function changePasswrd(Request $request){
+        return $request->header('token');
+        $user = $this->userRepository->findByID($request->id);
         // validate the user input fields
-        $validations = $this->userRepository->validations($request->all(),["current_password"=>["required", new MatchOldPassword],'password'=>"bail|required|min:6|confirmed",]);
+        $validations = $this->userRepository->validations($request->all(),["current_password"=>["required"],'password'=>"bail|required|min:6|confirmed",]);
         // if validations fails then return error in response
         if(!$validations['success']){ return $this->responseRepository->error("",$validations['errors']);}
-        
-        // update user profile
-        $user = $this->userRepository->update($request->only(['name','email']),$request->id);
+        if(!Hash::check($request->current_password, $user->password)){ return $this->responseRepository->error("",["current_password"=>["Current password does not match"]]);}
+              
+        $user = $this->userRepository->update(['password'=>Hash::make($request->password)],$request->id);
         if(!is_null($user)){
-            $user = $this->userRepository->findByID($request->id);
-            // create token
-            $userToken = $user->createToken(
-                $user->name.'_'.Carbon::now(), // The name of the token
-                ['*'],                         // Whatever abilities you want
-                Carbon::now()->addHours(2)     // The expiration time
-            );
-            $user = $user->only(['id','name','email']);
-            return $this->responseRepository->success("Your profile has been updated successfully",array_merge($user,['token'=>$userToken->plainTextToken,"expire_at"=>strtotime($userToken->accessToken->expires_at)]));
+            return $this->responseRepository->success("Your password has been updated successfully");
         }
         return $this->responseRepository->error("Something went wrong!");
     }

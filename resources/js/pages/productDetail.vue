@@ -72,7 +72,7 @@
                 </div>
             </div>
 
-            <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated">
+            <div class="px-3 px-lg-6" data-animated-id="1" v-if="feedbacks.length>0">
                 <div class="mb-6"> <h2 class="mb-0 text-heading fs-22 lh-15">Feedbacks</h2> </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -108,7 +108,7 @@
                                                     <span>{{feedback.created_at}}</span>
                                                 </div>
 
-                                                <div class="input-group mb-3">
+                                                <div class="input-group mb-3" v-if="isAuthenticated">
                                                     <input type="text" class="form-control h-40" placeholder="Comment here">
                                                     <div class="input-group-append">
                                                         <button class="btn btn-primary h-40" type="button">
@@ -144,13 +144,16 @@
 </style>
 
 <script>
-    import axios from "axios";
+    import axios from '../config/axios';
     import vueInput from '../components/vueInput.vue';
     import vueLabel from '../components/vueLabel.vue';
     import vueSelect from '../components/vueSelect.vue';
     import vueTextarea from '../components/vueTextarea.vue';
     import { Form } from 'vee-validate';
     import * as yup from 'yup';
+    import Echo from 'laravel-echo';
+    import Pusher from 'pusher-js';
+
     
     export default {
         data(){
@@ -167,22 +170,23 @@
                 },
                 validatonsErrors:{},
                 feedbackCategories: [],
-                feedbacks: [],
+                feedbacksList: [],
             }
         },
         mounted(){
             // get detail of product  on mounted
             this.getProductDetail();
+            this.listen();
             console.clear();
         },
         methods:{
             // get list of products using api request call
             async getProductDetail(){
-                const response = await axios.get(`http://127.0.0.1:8000/api/products/${this.slug}/detail`);
+                const response = await axios.get(`products/${this.slug}/detail`);
                 if(response.data.success){
                     this.product = response.data.data.product;
                     this.feedbackCategories = response.data.data.feedbackCategories;
-                    this.feedbacks = this.product.feedbacks;
+                    this.feedbacksList = this.product.feedbacks;
                 }
                
             },
@@ -191,9 +195,15 @@
                 this.feedback.files = Array.from(event.target.files);
             },
             listen(){
-                Echo.channel('product.'+this.product.id)
+                const echo = new Echo({
+                    broadcaster: 'pusher',
+                    key: "475a838e65ad35491e90",
+                    cluster:"mt1",
+                    encrypted:true
+                });
+                echo.channel('product.'+this.product.id)
                 .listen('NewFeedback',(feedback)=>{
-                    this.feedbacks.unshift(feedback);
+                    this.feedbacksList.unshift(feedback);
                 });
             },
             async submitForm(){
@@ -207,7 +217,7 @@
                     formData.append('files[]', file);
                 });
 
-                const response = await axios.post(this.$store.state.apiUrl+'feedbacks/store',formData);
+                const response = await axios.post('feedbacks/store',formData);
                 if(response.data.success==false){
                     this.validatonsErrors= response.data.errors;
                     if(response.data.message!=''){
@@ -219,7 +229,7 @@
                     }
                 }else if(response.data.success==true){
                     this.$swal(response.data.message);
-                    this.feedbacks.unshift(response.data.data);
+                    this.feedbacksList.unshift(response.data.data);
                 }
             },
         },
@@ -237,6 +247,9 @@
             isAuthenticated(){
                 // return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at) && (this.product.userIDs.length>0 && !this.product.userIDs.includes(this.$store.state.user.id));
                 return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at);
+            },
+            feedbacks(){
+                return this.feedbacksList;
             }
         },
         components:{
