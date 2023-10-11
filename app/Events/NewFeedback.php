@@ -37,8 +37,6 @@ class NewFeedback implements ShouldBroadcastNow
     }
 
     public function broadcastAs(){
-        return json_encode([
-            'title'=>$this->feedback->title
-        ]);
+        return 'NewFeedback';
     }
 }

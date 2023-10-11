@@ -201,8 +201,12 @@
                     cluster:"mt1",
                     encrypted:true
                 });
+                console.log("before",'product.'+this.product.id)
                 echo.channel('product.'+this.product.id)
                 .listen('NewFeedback',(feedback)=>{
+                    console.log("product",'product.'+this.product.id);
+                    console.log("pusher",feedback);
+                    alert(feedback);
                     this.feedbacksList.unshift(feedback);
                 });
             },
