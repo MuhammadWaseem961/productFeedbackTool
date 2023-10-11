@@ -33,4 +33,5 @@ Route::controller(ApiController::class)->group(function () {
 });
 Route::controller(FeedbackController::class)->group(function () {
     Route::post('feedbacks/store', 'store');
+    Route::get('user/feedbacks', 'userFeedbacks');
 });

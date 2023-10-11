@@ -18,6 +18,14 @@ class Feedback extends Model
         return $this->belongsTo(FeedbackCategory::class,"feedback_category_id",'id');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
+
     // public function getCreatedAtAttribute($date)
     // {
     //     return $date->format('Y-m-d h:i');

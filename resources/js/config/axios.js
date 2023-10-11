@@ -6,6 +6,7 @@ const axiosInstance = axios.create({
   baseURL: store.state.apiUrl, // Set your API base URL
   headers: {
     'token': store.state.user.token || '', // user authorization token
+    'expire_at': store.state.user.expire_at || '', // user authorization token
     'id': store.state.user.id || '', // login user id
   },
 });

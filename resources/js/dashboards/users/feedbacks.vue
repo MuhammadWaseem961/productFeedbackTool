@@ -8,30 +8,30 @@
                         <div class="card">
                             <div class="card-body p-6">
                                 <div class="table-responsive pb-4">
-                                    <table id="myDataTable" class="table data__table table-hover bg-white border rounded-lg">
+                                    <DataTable :data='feedbacks' class="table data__table table-hover bg-white border rounded-lg">
                                         <thead>
-                                            <tr role="row">
-                                                <th class="no-sort py-6 pl-6">#</th>
-                                                <th class="py-6">Category</th>
-                                                <th class="py-6">Author</th>
-                                                <th class="py-6">Blog</th>
-                                                <th class="py-6">Date</th>
-                                                <th class="py-6">Status</th>
-                                                <th class="no-sort py-6">Actions</th>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Username</th>
+                                                <th>Product</th>
+                                                <th>Title</th>
+                                                <th>Category</th>
+                                                <th>Vote Up</th>
+                                                <th>Vote Down</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr role="row">
-                                                <td class="no-sort py-6 pl-6">#</td>
-                                                <td class="py-6">Category</td>
-                                                <td class="py-6">Autdor</td>
-                                                <td class="py-6">Blog</td>
-                                                <td class="py-6">Date</td>
-                                                <td class="py-6">Status</td>
-                                                <td class="no-sort py-6">Actions</td>
+                                            <tr v-for="feedback in feedbacks" :key="feedback.id">
+                                                <td>{{feedback.id}}</td>
+                                                <td>{{feedback.user.name}}</td>
+                                                <td>{{feedback.product.title}}</td>
+                                                <td>{{feedback.title}}</td>
+                                                <td>{{feedback.category.title}}</td>
+                                                <td>0</td>
+                                                <td>0</td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </DataTable>
                                 </div>
                             </div>
                         </div>
@@ -45,26 +45,45 @@
 
 <script>
     import axios from '../../config/axios';
+    import DataTable from "datatables.net-vue3";
+    import DataTableLib from "datatables.net-bs5";
+    import ButtonsHtml5 from "datatables.net-buttons-bs5";
+    import "datatables.net-responsive-bs5";
+    DataTable.use(DataTableLib);
+    DataTable.use(ButtonsHtml5);
 
     export default {
         data(){
             return {
-                
+                feedbacksList:[]
             }
         },
-        mounted() {
-            // Initialize DataTables
-            $('#myDataTable').DataTable({
-            responsive: true, // Enable responsive design
-            // Add any other DataTable options here
-            });
+        mounted(){
+            this.getListOfUserFeedbacks();
         },
         components:{
-            
+            DataTable
         },
-        computed: {
-           
+        methods: {
+            async getListOfUserFeedbacks(){
+                const response = await axios.get('user/feedbacks');
+                if(response.data.success){
+                    this.feedbacksList = response.data.data;
+                }
+            }
         },
+        computed:{
+            feedbacks(){
+                if(this.feedbacksList.length>0){
+                    let items = [];
+                    this.feedbacksList.forEach((item,index)=>{
+                        items.push([++index,item.user.name,item.product.title,item.title,item.category.title,0,0])
+                    });
+                    return items;
+                }
+                return [];
+            }
+        }
         
     }
 </script>

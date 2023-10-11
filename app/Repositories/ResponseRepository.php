@@ -20,4 +20,12 @@
         public function error($message='',$errors=[]){
             return response()->json(['success'=>false,"message"=>$message,"errors"=>$errors]);
         }
+
+        /**
+         * error response
+         */
+        
+        public function auth($message=''){
+            return response()->json(["message"=>$message,"authentication"=>false]);
+        }
     }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
-use App\Repositories\{FeedbackRepository,ResponseRepository};
+use App\Repositories\{FeedbackRepository,UserRepository,ResponseRepository};
 
 
 class FeedbackController extends Controller
@@ -15,10 +15,12 @@ class FeedbackController extends Controller
      */
     private $feedbackRepository;
     private $responseRepository;
+    private $userRepository;
 
-    public function __construct(FeedbackRepository $feedbackRepository,ResponseRepository $responseRepository){
+    public function __construct(UserRepository $userRepository,FeedbackRepository $feedbackRepository,ResponseRepository $responseRepository){
         $this->feedbackRepository = $feedbackRepository;
         $this->responseRepository = $responseRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -34,5 +36,15 @@ class FeedbackController extends Controller
         if(!is_null($feedback)){
             return $this->responseRepository->success("Feedback added successfully",$feedback);
         }
+    }
+
+    /**
+     * get list of user's feedbacks
+     */
+    public function userFeedbacks(Request $request){
+        if(!$this->userRepository->isAuthenticated($request)){
+            return $this->responseRepository->auth("Authentication failed please login");
+        }
+        return $this->responseRepository->success('',$this->feedbackRepository->userFeedbacks($request->header('id')));
     }
 }

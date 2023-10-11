@@ -81,4 +81,14 @@
         public function findByEmail($email){
             return $this->model->where('email',$email)->first();
         }
+
+        /**
+         * user is authenticated
+         */
+        public function isAuthenticated($data){
+            if($this->findByID($data->header('id'))!=null && time()<$data->header('expire_at') && time()>$data->header('expire_at')!='' || $data->header('token')!=''){
+                return true;
+            }
+            return false;
+        }
     }

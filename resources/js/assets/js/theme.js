@@ -1223,17 +1223,17 @@
       });
     },
     sortingInvoice: function () {
-      var $table = $ ('#invoice-list');
-      $table.DataTable ({
-        order: [],
-        paging: false,
-        searching: false,
-        info: false,
-        columnDefs: [
-          {orderable: false, targets: 0},
-          {targets: 'no-sort', orderable: false},
-        ],
-      });
+      // var $table = $ ('#invoice-list');
+      // $table.DataTable ({
+      //   order: [],
+      //   paging: false,
+      //   searching: false,
+      //   info: false,
+      //   columnDefs: [
+      //     {orderable: false, targets: 0},
+      //     {targets: 'no-sort', orderable: false},
+      //   ],
+      // });
     },
   };
   $ (document).ready (function () {

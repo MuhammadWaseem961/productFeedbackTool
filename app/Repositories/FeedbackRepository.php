@@ -83,4 +83,18 @@
             return $this->model->find($id);
         }
 
+        /**
+         * get user's feedbacks
+         */
+
+         public function userFeedbacks($userID){
+            return $this->model->with(['user'=>function($user){
+                $user->select(['id','name']);
+            },'category'=>function($category){
+                $category->select(['id','title']);
+            },'product'=>function($product){
+                $product->select(['id','title']);
+            }])->where('user_id',$userID)->get();
+         }
+
     }
