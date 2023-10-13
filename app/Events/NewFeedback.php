@@ -32,7 +32,7 @@ class NewFeedback implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('product.'.$this->feedback->product_id),
+            new Channel('product-'.$this->feedback->product_id),
         ];
     }
 

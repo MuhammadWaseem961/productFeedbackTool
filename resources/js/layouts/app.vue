@@ -3,7 +3,10 @@
         <div class="sticky-area">
             <div class="container">
                 <nav class="navbar navbar-expand-lg px-0">
-                    <router-link class="navbar-brand" to="/">
+                    <router-link class="navbar-brand d-md-none d-sm-none" to="/">
+                        Product Feedback Tool 
+                    </router-link>
+                    <router-link class="navbar-brand d-lg-none text-white" to="/">
                         Product Feedback Tool
                     </router-link>
                     <div class="d-flex d-lg-none ml-auto">

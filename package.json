@@ -3,6 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "clear": "vite clear",
         "build": "vite build"
     },
     "devDependencies": {

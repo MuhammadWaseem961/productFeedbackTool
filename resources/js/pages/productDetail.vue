@@ -101,7 +101,7 @@
                                                     </button>
                                                 </div>
 
-                                                <div class="container__  col-lg-12" >
+                                                <!-- <div class="container__  col-lg-12" >
                                                     <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
                                                     <p><span>{{feedback.title}}</span></p>
                                                     <p>{{feedback.description}}</p>
@@ -117,7 +117,7 @@
                                                             </svg>
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div> 
                                         </div>
                                     </div>
@@ -153,7 +153,9 @@
     import * as yup from 'yup';
     import Echo from 'laravel-echo';
     import Pusher from 'pusher-js';
-
+    var pusher = new Pusher('475a838e65ad35491e90', {
+      cluster: 'mt1'
+    });
     
     export default {
         data(){
@@ -176,7 +178,6 @@
         mounted(){
             // get detail of product  on mounted
             this.getProductDetail();
-            this.listen();
             console.clear();
         },
         methods:{
@@ -187,6 +188,7 @@
                     this.product = response.data.data.product;
                     this.feedbackCategories = response.data.data.feedbackCategories;
                     this.feedbacksList = this.product.feedbacks;
+                    this.listen();
                 }
                
             },
@@ -195,20 +197,15 @@
                 this.feedback.files = Array.from(event.target.files);
             },
             listen(){
-                const echo = new Echo({
-                    broadcaster: 'pusher',
-                    key: "475a838e65ad35491e90",
-                    cluster:"mt1",
-                    encrypted:true
-                });
-                console.log("before",'product.'+this.product.id)
-                echo.channel('product.'+this.product.id)
-                .listen('NewFeedback',(feedback)=>{
-                    console.log("product",'product.'+this.product.id);
-                    console.log("pusher",feedback);
-                    alert(feedback);
-                    this.feedbacksList.unshift(feedback);
-                });
+                var channel = pusher.subscribe('product-'+this.product.id);
+                channel.bind('NewFeedback', function(data) {
+                    if(typeof(this.feedbacksList) !="undefined"){
+                        const feedbackExists = this.feedbacksList.some(obj => obj.id === data.feedback.id);
+                        if (!feedbackExists) {
+                            this.feedbacksList.unshift(data.feedback);
+                        }
+                    }
+                }.bind(this));
             },
             async submitForm(){
                 let formData = new FormData();
@@ -233,7 +230,6 @@
                     }
                 }else if(response.data.success==true){
                     this.$swal(response.data.message);
-                    this.feedbacksList.unshift(response.data.data);
                 }
             },
         },

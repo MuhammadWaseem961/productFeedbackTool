@@ -53,6 +53,13 @@
                 $data['files'] = json_encode($this->uploadMultipleFiles($request,'uploads/feedbacks'));
             }
             $feedback = $this->model->create($data);
+            $feedback = $this->model->with(['user'=>function($user){
+                $user->select(['id','name']);
+            },'category'=>function($category){
+                $category->select(['id','title']);
+            },'product'=>function($product){
+                $product->select(['id','title']);
+            }])->find($feedback->id);
             broadcast(new NewFeedback($feedback))->toOthers();
             return $feedback;
         }
