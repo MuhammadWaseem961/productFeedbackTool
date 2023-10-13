@@ -23,8 +23,8 @@
                                             </span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <router-link to="/user/profile" exact active-class="active"  class="dropdown-item">Profile</router-link>
-                                            <router-link to="/user/change/password" exact active-class="active" class="dropdown-item">Change Password</router-link>
+                                            <router-link to="/admin/profile" exact active-class="active"  class="dropdown-item">Profile</router-link>
+                                            <router-link to="/admin/change/password" exact active-class="active" class="dropdown-item">Change Password</router-link>
                                             <button class="dropdown-item" type="button" @click="logout">Logout</button>
                                         </div>
                                     </div>
@@ -43,13 +43,11 @@
                                 <li class="list-group-item pt-6 pb-4">
                                     <h5 class="fs-13 letter-spacing-087 text-muted mb-3 text-uppercase px-3">Main</h5>
                                     <ul class="list-group list-group-no-border rounded-lg">
-
-                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item" :class="{ active: isLinkActive('/user/feedbacks') }">
-                                            <router-link to="/user/feedbacks" class="text-heading  lh-1 sidebar-link">
+                                        <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item" :class="{ active: isLinkActive('/admin/feedbacks') }">
+                                            <router-link to="/admin/feedbacks" class="text-heading  lh-1 sidebar-link">
                                                 <span class="sidebar-item-text">Feedbacks</span>
                                             </router-link>
                                         </li>
-
                                     </ul>
                                 </li>
                             </ul>
@@ -88,8 +86,8 @@
                                         </div>
                                     </router-link>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
-                                        <router-link to="/user/profile" exact active-class="active" class="dropdown-item">Profile</router-link>
-                                        <router-link to="/user/change/password" exact active-class="active" class="dropdown-item">Change Password</router-link>
+                                        <router-link to="/admin/profile" exact active-class="active"  class="dropdown-item">Profile</router-link>
+                                        <router-link to="/admin/change/password" exact active-class="active" class="dropdown-item">Change Password</router-link>
                                         <button class="dropdown-item" type="button" @click="logout">Logout</button>
                                     </div>
                                 </div>
@@ -115,6 +113,6 @@
             isLinkActive(route) {
                 return this.$route.path === route;
             }
-        }
+        },
     }
 </script>

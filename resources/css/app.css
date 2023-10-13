@@ -3840,10 +3840,13 @@ input[type="button"].btn-block {
     background-color: #f8f9fa;
 }
 .dropdown-item.active,
-.dropdown-item:active {
-    color: #fff;
+.dropdown-item:active ,.sidebar-item.active{
+    color: #fff !important;
     text-decoration: none;
-    background-color: #0ec6d5;
+    background-color: #0ec6d5 !important;
+}
+.sidebar-item.active a{
+    color:#fff !important;
 }
 .dropdown-item.disabled,
 .dropdown-item:disabled {

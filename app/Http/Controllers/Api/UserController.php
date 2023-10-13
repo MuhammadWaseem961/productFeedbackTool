@@ -78,7 +78,7 @@ class UserController extends Controller
             $redirectUrl = $user->type=='1'?"adminDashboard":"userDashboard";
 
             // send only specific property
-            $user = $user->only(['id','name','email']);
+            $user = $user->only(['id','name','email','type']);
             return $this->responseRepository->success("You have been logged in successfully",array_merge($user,["redirectUrl"=>$redirectUrl,'token'=>$userToken->plainTextToken,"expire_at"=>strtotime($userToken->accessToken->expires_at)]));
         
         }else{
@@ -115,7 +115,10 @@ class UserController extends Controller
      * update user password
      */
     public function changePasswrd(Request $request){
-        return $request->header('token');
+        return $this->responseRepository->auth("Authentication failed please login");
+        if(!$this->userRepository->isAuthenticated($request)){
+            return $this->responseRepository->auth("Authentication failed please login");
+        }
         $user = $this->userRepository->findByID($request->id);
         // validate the user input fields
         $validations = $this->userRepository->validations($request->all(),["current_password"=>["required"],'password'=>"bail|required|min:6|confirmed",]);
