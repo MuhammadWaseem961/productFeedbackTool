@@ -8,7 +8,7 @@
                         <div class="card">
                             <div class="card-body p-6">
                                 <div class="table-responsive pb-4">
-                                    <DataTable :data='feedbacks' class="table data__table table-hover bg-white border rounded-lg">
+                                    <DataTable :data="feedbacks" class="table data__table table-hover bg-white border rounded-lg">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -19,11 +19,22 @@
                                                 <th>Total Votes</th>
                                                 <th>Votes Sum</th>
                                                 <th>Actions</th>
-
                                             </tr>
                                         </thead>
-
+                                        <tbody>
+                                            <tr v-for="(feedback, index) in feedbacks" :key="feedback.id">
+                                                <td>{{ feedback.id }}</td>
+                                                <td>{{ feedback.username }}</td>
+                                                <td>{{ feedback.product }}</td>
+                                                <td>{{ feedback.title }}</td>
+                                                <td>{{ feedback.category }}</td>
+                                                <td>{{ feedback.votes }}</td>
+                                                <td>{{ feedback.votes_sum }}</td>
+                                                <td v-html="feedback.actions"></td>
+                                            </tr>
+                                        </tbody>
                                     </DataTable>
+
                                 </div>
                             </div>
                         </div>
@@ -120,13 +131,18 @@
                 if(this.feedbacksList.length>0){
                     let items = [];
                     this.feedbacksList.forEach((item,index)=>{
-                        items.push([
-                            ++index,item.user.name,item.product.title,item.title
-                            ,item.category.title,item.votes_count,item.total_votes!=null?item.total_votes:0,
-                            `<router-link class="btn btn-sm btn-primary" :to='feedbacls/${item.id}/edit' ><i class="fas fa-edit"></i></router-link>
+                        items.push({
+                            id:item.id,
+                            username:item.user.name,
+                            product:item.product.title,
+                            title:item.title,
+                            category:item.category.title,
+                            votes:item.votes_count,
+                            votes_sum:item.total_votes!=null?item.total_votes:0,
+                            actions:`<router-link class="btn btn-sm btn-primary" :to='feedbacls/${item.id}/edit' ><i class="fas fa-edit"></i></router-link>
                             <button class="btn btn-sm btn-danger" to='#' type="button" @click="delete(item.id)"><i class="fas fa-trash"></i></button>
                             `
-                        ]);
+                        });
                     });
                     return items;
                 }

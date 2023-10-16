@@ -2,23 +2,24 @@
 
 namespace App\Events;
 
-use App\Models\Feedback;
+use App\Models\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewFeedback implements ShouldBroadcastNow
+class NewCommentNotification
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $feedback;
+
+    public $comment;
     /**
      * Create a new event instance.
      */
-    public function __construct(Feedback $feedback)
+    public function __construct(Comment $comment)
     {
-        $this->feedback = $feedback;
+        $this->comment = $comment;
     }
 
     /**
@@ -28,12 +29,13 @@ class NewFeedback implements ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
+        $user_id = $this->comment->user_id;
         return [
-            new Channel('product-'.$this->feedback->product_id),
+            new Channel("user-$user_id-notifications"),
         ];
     }
 
     public function broadcastAs(){
-        return 'NewFeedback';
+        return 'user-new-comment-notification';
     }
 }

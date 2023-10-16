@@ -22,9 +22,9 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: "475a838e65ad35491e90",
-//     cluster:"mt1",
-//     encrypted:true
-// });
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: "475a838e65ad35491e90",
+    cluster:"mt1",
+    encrypted:true
+});
