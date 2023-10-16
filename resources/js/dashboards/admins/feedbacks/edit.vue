@@ -16,21 +16,13 @@
                                                 <th>Product</th>
                                                 <th>Title</th>
                                                 <th>Category</th>
-                                                <th>Vote Up</th>
-                                                <th>Vote Down</th>
+                                                <th>Total Votes</th>
+                                                <th>Votes Sum</th>
+                                                <th>Actions</th>
+
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr v-for="feedback in feedbacks" :key="feedback.id">
-                                                <td>{{feedback.id}}</td>
-                                                <td>{{feedback.user.name}}</td>
-                                                <td>{{feedback.product.title}}</td>
-                                                <td>{{feedback.title}}</td>
-                                                <td>{{feedback.category.title}}</td>
-                                                <td>0</td>
-                                                <td>0</td>
-                                            </tr>
-                                        </tbody>
+
                                     </DataTable>
                                 </div>
                             </div>
@@ -43,8 +35,17 @@
     </div>
 </template>
 
+<style>
+    .dataTables_wrapper:nth-child(1).col-md-6{
+        /* display: flex;
+        justify-content: end; */
+        background-color: red;
+    }
+
+</style>
+
 <script>
-    import axios from '../../config/axios';
+    import axios from '../../../config/axios';
     import DataTable from "datatables.net-vue3";
     import DataTableLib from "datatables.net-bs5";
     import ButtonsHtml5 from "datatables.net-buttons-bs5";
@@ -66,7 +67,7 @@
         },
         methods: {
             async getListOfUserFeedbacks(){
-                const response = await axios.get('user/feedbacks');
+                const response = await axios.get('admin/feedbacks');
                 if(response.data.hasOwnProperty('authentication') && !response.data.authentication){
                     if(response.data.message!=''){
                         this.$swal({
@@ -87,7 +88,13 @@
                 if(this.feedbacksList.length>0){
                     let items = [];
                     this.feedbacksList.forEach((item,index)=>{
-                        items.push([++index,item.user.name,item.product.title,item.title,item.category.title,0,0])
+                        items.push([
+                            ++index,item.user.name,item.product.title,item.title
+                            ,item.category.title,item.votes_count,item.total_votes!=null?item.total_votes:0,
+                            `<router-link class="btn btn-sm btn-primary" to='feedbacls/${item.id}/edit' ><i class="fas fa-edit"></i></router-link>
+                            <router-link class="btn btn-sm btn-danger" to='#' type="button" ><i class="fas fa-trash"></i></router-link>
+                            `
+                        ]);
                     });
                     return items;
                 }

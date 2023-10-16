@@ -12,7 +12,8 @@ import userFeedbacks from "../dashboards/users/feedbacks.vue";
 import adminDashboard from "../dashboards/admins/dashboard.vue";
 import adminProfile from "../dashboards/admins/adminProfile.vue";
 import adminChangePassword from "../dashboards/admins/changePassword.vue";
-import adminFeedbacks from "../dashboards/admins/feedbacks.vue";
+import adminFeedbacks from "../dashboards/admins/feedbacks/index.vue";
+import editAdminFeedback from "../dashboards/admins/feedbacks/edit.vue";
 import Home from "../pages/home.vue";
 import productDetail from "../pages/productDetail.vue";
 // import AdminLogin from "../views/auth/AdminLogin.vue";
@@ -43,6 +44,7 @@ const routes = [
             {path:"/admin/profile", name:"adminProfile", component:adminProfile,meta:{requireAuth:true,type:1}},
             {path:"/admin/change/password", name:"adminChangePassword", component:adminChangePassword,meta:{requireAuth:true,type:1}},
             {path:"/admin/feedbacks", name:"adminFeedbacks", component:adminFeedbacks,meta:{requireAuth:true,type:1}},
+            {path:"/admin/feedbacks/:id/edit", name:"editAdminFeedbacks", component:editAdminFeedback,meta:{requireAuth:true,type:1}},
 
         ]
     },

@@ -26,6 +26,14 @@ class Feedback extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function votes(){
+        return $this->hasMany(FeedbackVote::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
     // public function getCreatedAtAttribute($date)
     // {
     //     return $date->format('Y-m-d h:i');

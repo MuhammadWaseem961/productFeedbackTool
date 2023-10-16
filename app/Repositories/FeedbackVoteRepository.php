@@ -2,12 +2,13 @@
     namespace App\Repositories;
 
     use App\Interfaces\EloquentRepositoryInterface;
-    use App\Models\User;
+    use App\Models\FeedbackVote;
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
-    use Validator;
+    use Illuminate\Support\Facades\{Validator,DB};
+    // use App\Events\NewFeedback;
 
-    class UserRepository implements EloquentRepositoryInterface
+    class FeedbackVoteRepository implements EloquentRepositoryInterface
     {
         /**
          * @var $model object of mod
@@ -15,11 +16,11 @@
         public $model;
 
         /**
-            * UserRepository constructor.
+            * FeedbackRepository constructor.
             *
-            * @param User $model
+            * @param Feedback $model
             */
-        public function __construct(User $model)
+        public function __construct(FeedbackVote $model)
         {
             $this->model = $model;
         }
@@ -45,11 +46,21 @@
          */
         
         public function store($data){
-           return $this->model->create($data);
+            $feedbackVote = $this->model->create($data);
+            $feedbackVote = $this->model->addSelect([
+                "*",
+                DB::raw("(
+                    SELECT SUM(vote) 
+                    FROM feedback_votes 
+                    WHERE feedback_id = $feedbackVote->feedback_id
+                ) as total_votes")
+            ])->find($feedbackVote->id);
+            // broadcast(new NewFeedback($feedback))->toOthers();
+            return $feedbackVote;
         }
 
         /**
-         * update user
+         * create user
          */
         
          public function update($data,$id){
@@ -74,18 +85,18 @@
             return $this->model->find($id);
         }
 
-
-         /**
-         * check record using email
-         */
-        public function findByEmail($email){
-            return $this->model->where('email',$email)->first();
-        }
-
         /**
-         * user is authenticated
+         * get user's feedbacks
          */
-        public function isAuthenticated($data){
-            return $this->findByID($data->header('id'))!=null && time()<$data->header('expire_at') && $data->header('token')!=''?'true':'false';
-        }
+
+         public function userFeedbacks($userID){
+            return $this->model->with(['user'=>function($user){
+                $user->select(['id','name']);
+            },'category'=>function($category){
+                $category->select(['id','title']);
+            },'product'=>function($product){
+                $product->select(['id','title']);
+            }])->where('user_id',$userID)->get();
+         }
+
     }

@@ -9,4 +9,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class FeedbackVote extends Model
 {
     use HasFactory,SoftDeletes;
+    protected $fillable = ['feedback_id', 'user_id', 'vote'];
 }

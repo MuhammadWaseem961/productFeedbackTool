@@ -6,7 +6,7 @@
     use App\Traits\ImageUploadTrait;
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
-    use Validator;
+    use Illuminate\Support\Facades\{Validator,DB};
     use App\Events\NewFeedback;
 
     class FeedbackRepository implements EloquentRepositoryInterface
@@ -32,7 +32,20 @@
         */
         public function all(): Collection
         {
-            return $this->model->all();    
+            return $this->model->addSelect([
+                "*",
+                DB::raw('(
+                    SELECT SUM(vote) 
+                    FROM feedback_votes 
+                    WHERE feedback_id = feedbacks.id
+                ) as total_votes')
+            ])->with(['user'=>function($user){
+                $user->select(['id','name']);
+            },'category'=>function($category){
+                $category->select(['id','title']);
+            },'product'=>function($product){
+                $product->select(['id','title']);
+            }])->withCount('votes')->get();    
         }
 
         /**
@@ -59,17 +72,36 @@
                 $category->select(['id','title']);
             },'product'=>function($product){
                 $product->select(['id','title']);
-            }])->find($feedback->id);
+            }])->addSelect([
+                DB::raw('(
+                    SELECT GROUP_CONCAT(user_id SEPARATOR ",") 
+                    FROM feedback_votes 
+                    WHERE feedback_id = feedbacks.id
+                ) as user_ids'),
+                DB::raw('(
+                    SELECT SUM(vote) 
+                    FROM feedback_votes 
+                    WHERE feedback_id = feedbacks.id
+                ) as total_votes')
+            ])->find($feedback->id);
             broadcast(new NewFeedback($feedback))->toOthers();
             return $feedback;
         }
 
         /**
-         * create user
+         * update Feedback
          */
         
-         public function update($data,$id){
+        public function update($data,$id){
             return $this->model->find($id)->update($data);
+        }
+
+         /**
+         * delete Feedback
+         */
+        
+         public function delete($id){
+            return $this->model->find($id)->delete();
          }
 
         /**

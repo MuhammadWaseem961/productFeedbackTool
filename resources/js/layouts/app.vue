@@ -52,7 +52,7 @@
                         <ul class="navbar-nav flex-row justify-content-lg-end d-flex flex-wrap align-items-center text-body py-2">
                             <li class="nav-item">
                                 <div class="border-md-right border-0 py-3 text-right" v-if="isAuthenticated">
-                                    <router-link to="/login" class="dropdown-item" >Logout</router-link>
+                                    <router-link to="#" class="dropdown-item" type="button" @click="logout">Logout</router-link>
                                 </div>
 
                                 <div class="border-md-right border-0 py-3 text-right" v-else>
@@ -624,6 +624,11 @@
     export default {
         mounted(){
             console.clear();
+        },
+        methods:{
+            logout(){
+                this.$store.dispatch('Logout',{});
+            },
         },
         computed:{
             isAuthenticated(){

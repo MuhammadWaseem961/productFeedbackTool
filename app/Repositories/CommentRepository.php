@@ -2,12 +2,13 @@
     namespace App\Repositories;
 
     use App\Interfaces\EloquentRepositoryInterface;
-    use App\Models\User;
+    use App\Models\Comment;
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
-    use Validator;
+    use Illuminate\Support\Facades\{Validator};
+    // use App\Events\NewFeedback;
 
-    class UserRepository implements EloquentRepositoryInterface
+    class CommentRepository implements EloquentRepositoryInterface
     {
         /**
          * @var $model object of mod
@@ -15,11 +16,11 @@
         public $model;
 
         /**
-            * UserRepository constructor.
+            * FeedbackRepository constructor.
             *
-            * @param User $model
+            * @param Feedback $model
             */
-        public function __construct(User $model)
+        public function __construct(Comment $model)
         {
             $this->model = $model;
         }
@@ -44,12 +45,14 @@
          * create user
          */
         
-        public function store($data){
-           return $this->model->create($data);
+        public function store($request){
+            $comment = $this->model->create($request->all());
+            // broadcast(new NewFeedback($feedback))->toOthers();
+            return $comment;
         }
 
         /**
-         * update user
+         * create user
          */
         
          public function update($data,$id){
@@ -65,7 +68,7 @@
                 return ['success'=>false,"errors"=>$validations->errors()];
             }
             return ['success'=>true];
-        }
+        }        
 
         /**
          * check record using id
@@ -74,18 +77,4 @@
             return $this->model->find($id);
         }
 
-
-         /**
-         * check record using email
-         */
-        public function findByEmail($email){
-            return $this->model->where('email',$email)->first();
-        }
-
-        /**
-         * user is authenticated
-         */
-        public function isAuthenticated($data){
-            return $this->findByID($data->header('id'))!=null && time()<$data->header('expire_at') && $data->header('token')!=''?'true':'false';
-        }
     }

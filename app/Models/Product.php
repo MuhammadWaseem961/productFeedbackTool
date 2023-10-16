@@ -29,6 +29,6 @@ class Product extends Model
 
     // get list of of user id whose give feedbacks
     public function feedbacksUsersID(){
-        return Feedback::where('product_id',$this->id)->pluck('user_id')->toArray();
+        return Feedback::where('product_id',$this->id)->distinct('user_id')->pluck('user_id')->toArray();
     }
 }

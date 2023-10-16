@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\{UserController,ApiController,FeedbackController};
+use App\Http\Controllers\Api\{UserController,ApiController,FeedbackController,CommentController};
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,14 @@ Route::controller(ApiController::class)->group(function () {
     Route::get('products', 'products');
     Route::get('products/{slug}/detail', 'productDetail');
 });
+
 Route::controller(FeedbackController::class)->group(function () {
     Route::post('feedbacks/store', 'store');
+    Route::get('admin/feedbacks', 'all');
     Route::get('user/feedbacks', 'userFeedbacks');
+    Route::post('add/feedback/vote', 'addFeedbackVote');
+});
+
+Route::controller(CommentController::class)->prefix('comments')->group(function () {
+    Route::post('store', 'store');
 });

@@ -10,7 +10,8 @@
                 </ol>
             </nav>
 
-            <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated">
+            <!-- <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated && "> -->
+            <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated && isAbleToFeedback">
                 <div class="mb-6"> <h2 class="mb-0 text-heading fs-22 lh-15">Add Feedback</h2> </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -79,45 +80,50 @@
                         <div class="row">
                             <div class="col-xl-12 mb-6 mb-xl-0">
                                 <div class="card">
-                                    <div class="card-body p-6">
+                                    <div class="card-body p-5">
                                         <div class="row">
-                                            <div class="container__  col-lg-12" v-for="feedback in feedbacks" :key="feedback.id">
+                                            <div class="container__  col-lg-12" v-for="(feedback,index) in feedbacks" :key="index">
                                                 <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
-                                                <p><span>{{feedback.title}}</span> {{feedback.category.title}}</p>
+                                                <div class="d-flex flex-direction-column">
+                                                    <span>{{feedback.user.name}}</span>
+                                                    <p><span>{{feedback.title}}</span> {{feedback.category.title}}</p>
+                                                </div>
                                                 <p>{{feedback.description}}</p>
-                                                <span>{{feedback.created_at}}</span>
-                                                <div class="d-flex w-100 align-items-end justify-content-end">
-                                                    <button class="btn btn-primary d-flex align-items-center btn-sm">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
-                                                        </svg> &nbsp;
-                                                        <span>6</span>
-                                                    </button>
-                                                    <button class="btn btn-primary ml-1 d-flex align-items-center btn-sm"> 
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"></path>
-                                                        </svg> &nbsp;
-                                                        <span>5</span>
-                                                    </button>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="date-time">{{feedback.created_at}}</span>
+                                                    <div class="d-flex w-100 align-items-end justify-content-end">
+                                                        <div class="d-flex flex-direction-column align-items-baseline">
+                                                            <i class="fas fa-angle-up f-24 text-bold" @click="feedbackVote(feedback,1)"></i>
+                                                            <span :id="'feedbackVotes'+feedback.id">{{ feedback.total_votes!=null?feedback.total_votes:0 }}</span>
+                                                            <i class="fas fa-angle-down f-24 text-bold" @click="feedbackVote(feedback,-1)" :disabled="isAbleToVote(feedback)"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
-                                                <!-- <div class="container__  col-lg-12" >
-                                                    <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
-                                                    <p><span>{{feedback.title}}</span></p>
-                                                    <p>{{feedback.description}}</p>
-                                                    <span>{{feedback.created_at}}</span>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-primary btn-sm mb-2" v-if="feedback.comments.length>0" @click="toggleCommentsVisibility(index)">{{ showComments[index] ? 'Hide Comments' : 'Show Comments' }}</button>
                                                 </div>
-
-                                                <div class="input-group mb-3" v-if="isAuthenticated">
-                                                    <input type="text" class="form-control h-40" placeholder="Comment here">
+                                                <div class="card p-3" v-if="showComments[index]" style="border:1px solid #eee;" >
+                                                    <div :id="'feedback'+feedback.id+'comments'">
+                                                        <div class="container__  col-lg-12" v-for="(comment ,index) in feedback.comments" :key="index">
+                                                            <img src="/images/avatar.jpeg" alt="Ronald Hunter" class="rounded-circle user-image">
+                                                            <p>{{ comment.user.name }}</p>
+                                                            <p>{{comment.comment}}</p>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="date-time">{{comment.created_at}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>  
+                                                </div>
+                                                <div class="input-group mb-3 mt-3" v-if="isAuthenticated">
+                                                    <input type="text" :id="'commentField'+feedback.id" class="form-control h-40" placeholder="Comment here">
                                                     <div class="input-group-append">
-                                                        <button class="btn btn-primary h-40" type="button">
+                                                        <button class="btn btn-primary h-40" type="button" @click="addCommnent(feedback.id)">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
                                                                 <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"></path>
                                                             </svg>
                                                         </button>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                             </div> 
                                         </div>
                                     </div>
@@ -141,6 +147,13 @@
     .h-40{
         height:40px !important; 
     }
+    .flex-direction-column{
+        flex-direction: column;
+    }
+    .f-24{ font-size: 24px;}
+    .date-time{ font-size: 14px; width: 100px; white-space: nowrap;}
+    .card{border: none;}
+    .container__{border: 1px solid #eee;background-color: #fff;}
 </style>
 
 <script>
@@ -173,14 +186,49 @@
                 validatonsErrors:{},
                 feedbackCategories: [],
                 feedbacksList: [],
+                showComments: []
             }
         },
         mounted(){
             // get detail of product  on mounted
             this.getProductDetail();
+            this.showComments = Array(this.feedbacksList.length).fill(false);
             console.clear();
         },
         methods:{
+            //add comment
+            async addCommnent(feedback_id){
+                const targetElem = `commentField${feedback_id}`;
+                const comment = document.getElementById(targetElem).value;
+                const response = await axios.post('comments/store',{feedback_id:feedback_id,user_id:this.$store.state.user.id,comment:comment});
+                console.log('ss',response.data.data.success);
+                if(response.data.success){
+                    const findIndexOfFeedback = this.feedbacksList.findIndex(item => item.id === feedback_id)
+                    const feedback = this.feedbacksList[findIndexOfFeedback];
+                    console.log("feedback",feedback);
+                    let comments = feedback.comments;
+                    console.log('comments before',comments);
+                    comments = comments.push(response.data.data);
+                    console.log("after",comments);
+                    console.log("comment",comment);
+                    feedback.comments = comments;
+                    console.log(comments);
+                    this.feedbacksList[findIndexOfFeedback] = feedback;
+                }
+            },
+            // show and hide comments section of feedback
+            toggleCommentsVisibility(index) {
+                this.showComments[index] = !this.showComments[index]; // Toggle comments visibility for the feedback at the specified index
+            },
+            // add feedback vote
+            async feedbackVote(feedback,vote){
+                if(this.isAbleToVote(feedback)){
+                    const response = await axios.post(`add/feedback/vote`,{feedback_id:feedback.id,vote:vote,user_id:this.$store.state.user.id});
+                    if(response.data.success){
+                        document.getElementById('feedbackVotes'+feedback.id).innerHTML =response.data.data.total_votes;
+                    }
+                }
+            },
             // get list of products using api request call
             async getProductDetail(){
                 const response = await axios.get(`products/${this.slug}/detail`);
@@ -232,6 +280,9 @@
                     this.$swal(response.data.message);
                 }
             },
+            isAbleToVote(feedback){
+                return feedback.user_ids!=null? feedback.user_ids.split(',').includes(this.$store.state.user.id):true;
+            },
         },
         computed: {
             schema(){
@@ -247,6 +298,10 @@
             isAuthenticated(){
                 // return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at) && (this.product.userIDs.length>0 && !this.product.userIDs.includes(this.$store.state.user.id));
                 return this.$store.state.user!=null && (parseInt(new Date()/1000) < this.$store.state.user.expire_at);
+            },
+           
+            isAbleToFeedback(){
+                return (this.product && this.product.feedback_user_ids && !this.product.feedback_user_ids.includes(this.$store.state.user.id));
             },
             feedbacks(){
                 return this.feedbacksList;
