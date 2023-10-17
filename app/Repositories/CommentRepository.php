@@ -6,7 +6,8 @@
     use Illuminate\Support\Collection;
     use Illuminate\Pagination\LengthAwarePaginator;
     use Illuminate\Support\Facades\{Validator};
-    // use App\Events\NewFeedback;
+    use App\Events\{NewComment as NewCommentEvent,NewCommentNotification};
+    use App\Notifications\NewComment;
 
     class CommentRepository implements EloquentRepositoryInterface
     {
@@ -14,15 +15,19 @@
          * @var $model object of mod
          */
         public $model;
+        public $feedbackRepository;
+        public $userRepository;
 
         /**
             * FeedbackRepository constructor.
             *
             * @param Feedback $model
             */
-        public function __construct(Comment $model)
+        public function __construct(Comment $model,FeedbackRepository $feedbackRepository,UserRepository $userRepository)
         {
             $this->model = $model;
+            $this->feedbackRepository= $feedbackRepository;
+            $this->userRepository= $userRepository;
         }
 
         /**
@@ -47,7 +52,11 @@
         
         public function store($request){
             $comment = $this->model->create($request->all());
-            // broadcast(new NewFeedback($feedback))->toOthers();
+            $feedback = $this->feedbackRepository->findByID($comment->feedback_id);
+            $user = $this->userRepository->findByID($feedback->user_id);
+            $user->notify(new NewComment($comment));
+            broadcast(new NewCommentEvent($comment))->toOthers();
+            broadcast(new NewCommentNotification($comment))->toOthers();
             return $comment;
         }
 
