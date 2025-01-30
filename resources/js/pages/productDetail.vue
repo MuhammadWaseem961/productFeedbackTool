@@ -11,7 +11,8 @@
             </nav>
 
             <!-- <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated && "> -->
-            <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated && isAbleToFeedback">
+            <!-- <div class="px-3 px-lg-6" data-animated-id="1" v-if="isAuthenticated && isAbleToFeedback"> -->
+            <div class="px-3 px-lg-6" data-animated-id="1">
                 <div class="mb-6"> <h2 class="mb-0 text-heading fs-22 lh-15">Add Feedback</h2> </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -166,7 +167,7 @@
     import * as yup from 'yup';
     import Echo from 'laravel-echo';
     import Pusher from 'pusher-js';
-    var pusher = new Pusher('475a838e65ad35491e90', {
+    var pusher = new Pusher('52ee5f73df2414959072', {
       cluster: 'mt1'
     });
     
@@ -236,7 +237,8 @@
                     this.product = response.data.data.product;
                     this.feedbackCategories = response.data.data.feedbackCategories;
                     this.feedbacksList = this.product.feedbacks;
-                    this.listen();
+                    this.commentListen();
+                    this.feedbackListen();
                 }
                
             },
@@ -244,15 +246,21 @@
             onFileChange(event) {
                 this.feedback.files = Array.from(event.target.files);
             },
-            listen(){
-                var channel = pusher.subscribe('product-'+this.product.id);
-                channel.bind('NewFeedback', function(data) {
+            feedbackListen(){
+                var feedback = pusher.subscribe('product-'+this.product.id);
+                feedback.bind('NewFeedback', function(data) {
                     if(typeof(this.feedbacksList) !="undefined"){
                         const feedbackExists = this.feedbacksList.some(obj => obj.id === data.feedback.id);
                         if (!feedbackExists) {
                             this.feedbacksList.unshift(data.feedback);
                         }
                     }
+                }.bind(this));
+            },
+            commentListen(){
+                var comment = pusher.subscribe('feedback-'+this.product.id+'-comments');
+                comment.bind('feedback-new-comment', function(data) {
+                    console.log("this is new comment",data);
                 }.bind(this));
             },
             async submitForm(){

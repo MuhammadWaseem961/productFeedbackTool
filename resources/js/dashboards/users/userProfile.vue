@@ -13,7 +13,17 @@
                                             <div class="invoice-address-company-fields">
                                                 <div class="form-group">
                                                     <vue-label for="name" class="text-heading" text="Name"/>
-                                                    <vue-input type="text" id="name" name="name" value={{this.$store.state.user.name}} :apiError="errors.name || []" v-model="user.name" placeholder="Name" />
+                                                    <Field name="name" :validateOnBlur="true" v-slot="{ errors }">
+                                                        <input type="text" class="form-control border-0" name="name" id="name"
+                                                            placeholder="Enter name" v-model="user.name"/>
+
+                                                        <span v-if="apiErrors.name && apiErrors.name.length" class="text-danger mt-1">{{ apiErrors.name[0].charAt(0).toUpperCase() +
+                                                            apiErrors.name[0].slice(1) }}</span>
+
+                                                        <ErrorMessage name="name" v-else-if="errors && errors.length">
+                                                            <span class="text-danger mt-1">{{ errors[0].charAt(0).toUpperCase() + errors[0].slice(1) }}</span>
+                                                        </ErrorMessage>
+                                                    </Field>
                                                 </div>
                                             </div>
                                         </div>
@@ -22,7 +32,17 @@
                                             <div class="invoice-address-company-fields">
                                                 <div class="form-group">
                                                     <vue-label for="email" class="text-heading" text="Email"/>
-                                                    <vue-input type="email" id="title" :value="user.email" name="email" :apiError="errors.email || []" v-model="user.email" placeholder="Email" aria-label="Email" />
+                                                    <Field name="email" :validateOnBlur="true" v-slot="{ errors }">
+                                                        <input type="email" class="form-control border-0" name="email" id="email"
+                                                            placeholder="Enter email" v-model="user.email"/>
+
+                                                        <span v-if="apiErrors.email && apiErrors.email.length" class="text-danger mt-1">{{ apiErrors.email[0].charAt(0).toUpperCase() +
+                                                            apiErrors.email[0].slice(1) }}</span>
+
+                                                        <ErrorMessage name="email" v-else-if="errors && errors.length">
+                                                            <span class="text-danger mt-1">{{ errors[0].charAt(0).toUpperCase() + errors[0].slice(1) }}</span>
+                                                        </ErrorMessage>
+                                                    </Field>
                                                 </div>
                                             </div>
                                         </div>
@@ -44,9 +64,8 @@
 
 <script>
     import axios from '../../config/axios';
-    import vueInput from '../../components/vueInput.vue';
     import vueLabel from '../../components/vueLabel.vue';
-    import { Form } from 'vee-validate';
+    import { Form ,Field,ErrorMessage } from 'vee-validate';
     import * as yup from 'yup';
 
     export default {
@@ -61,9 +80,10 @@
             }
         },
         components:{
-            vueInput,
             vueLabel,
-            Form
+            Form,
+            Field,
+            ErrorMessage
         },
         computed: {
             schema(){
@@ -72,7 +92,7 @@
                     email: yup.string().email().required(),
                 });
             },
-            errors() {
+            apiErrors() {
                 return this.validatonsErrors; // Computed property to access the server response
             },
         },

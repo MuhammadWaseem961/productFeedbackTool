@@ -8,10 +8,11 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewComment
+class NewComment implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $comment;
@@ -30,9 +31,9 @@ class NewComment
      */
     public function broadcastOn(): array
     {
-        $feedback_id = $this->comment->feedback_id;
+        $product_id = $this->comment->feedback->product_id;
         return [
-            new Channel("feedback-$feedback_id-new-comment"),
+            new Channel("feedback-$product_id-comments"),
         ];
     }
 

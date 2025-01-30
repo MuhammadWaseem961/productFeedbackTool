@@ -66,6 +66,7 @@
                 $data['files'] = json_encode($this->uploadMultipleFiles($request,'uploads/feedbacks'));
             }
             $feedback = $this->model->create($data);
+            // return $feedback;
             $feedback = $this->model->with(['user'=>function($user){
                 $user->select(['id','name']);
             },'category'=>function($category){
@@ -73,6 +74,7 @@
             },'product'=>function($product){
                 $product->select(['id','title']);
             }])->addSelect([
+                "*",
                 DB::raw('(
                     SELECT GROUP_CONCAT(user_id SEPARATOR ",") 
                     FROM feedback_votes 
@@ -83,7 +85,7 @@
                     FROM feedback_votes 
                     WHERE feedback_id = feedbacks.id
                 ) as total_votes')
-            ])->find($feedback->id);
+            ])->where('id',$feedback->id)->first();
             broadcast(new NewFeedback($feedback))->toOthers();
             return $feedback;
         }
